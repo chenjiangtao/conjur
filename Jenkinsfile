@@ -1,4 +1,53 @@
-#!/usr/bin/env groovy
+#flags for all the authenticator stuff!/usr/bin/env groovy
+
+/**
+
+CI Proposal
+
+
+
+Jenkins func links: TBD
+Bash lib: https://github.com/conjurinc/jenkins-pipeline-library/tree/master/vars
+
+This file is the "main" entrypoint
+
+explanation of executors, one main, then others to run tests
+
+usage of env vars
+
+archiveFiles
+publishHTML
+
+moving GCP authenticator out
+
+explanation how many of the endpoints just run cucumber tests
+even though we have option to do anything (add example)
+
+move this stuff into README including current main/test top comments
+
+IDEA: 
+  flags for all the authenticator stuff
+  or maybe it triggers after master merge
+
+    Azure Authenticator
+    GCP Authenticator
+    Kubernetes
+    LDAP
+    OIDC Authenticator
+
+  AND/OR:
+    Manually specify which to run in the Jenkinsfile for cases
+    where you are developing, need the CI to cycle, but want to optimize
+    your time.
+    
+
+  and then let devs decide if they need to run them using the Jenkins thing.
+  and they will get run anyway by "NIGHTLY" or twice daily stuff?
+
+
+**/
+
+
 
 pipeline {
   agent { label 'executor-v2' }
