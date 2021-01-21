@@ -19,7 +19,13 @@ class ResourcesController < RestController
     # The v5 API currently sends +acting_as+ when listing resources
     # for a role other than the current user.
     query_role = params[:role].presence || params[:acting_as].presence
-    scope = Resource.visible_to(assumed_role(query_role)).search options
+    begin
+        scope = Resource.visible_to(assumed_role(query_role)).search options
+    rescue ApplicationController::Forbidden => e
+      raise e
+    rescue => e
+      raise ApplicationController::UnprocessableEntity, e.message
+    end
 
     result =
       if params[:count] == 'true'

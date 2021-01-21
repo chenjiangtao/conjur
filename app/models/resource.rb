@@ -105,6 +105,14 @@ class Resource < Sequel::Model
       scope = scope.textsearch(search) if search
 
       if offset || limit
+        # 'limit' must be an integer greater than 0 if given
+        if limit && (!numeric?(limit) || limit.to_i <= 0)
+          raise "'limit' contains an invalid value. 'limit' must be a positive integer."
+        end
+        # 'offset' must be an integer greater than or equal to 0 if given
+        if offset && (!numeric?(offset) || offset.to_i.negative?)
+          raise "'offset' contains an invalid value. 'offset' must be an integer greater than or equal to 0."
+        end
         scope = scope.order(:resource_id).limit(
           (limit || 10).to_i,
           (offset || 0).to_i
@@ -130,6 +138,10 @@ class Resource < Sequel::Model
 
     def visible_to role
       from Sequel.function(:visible_resources, role.id).as(:resources)
+    end
+
+    def numeric? val
+      val == val.to_i.to_s
     end
   end
 

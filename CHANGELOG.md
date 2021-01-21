@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   [cyberark/conjur#1974](https://github.com/cyberark/conjur/issues/1974)
 - Correct unit tests and integration tests for audit, and correct a couple of issues found with them.
   [cyberark/conjur#1987](https://github.com/cyberark/conjur/issues/1987)
+- Conjur now verifies that the `offset` parameter is a valid integer value.
+  The `GET /resources` request will fail if `offset` is not an integer greater than or equal to 0.
+  [cyberark/conjur#1997](https://github.com/cyberark/conjur/issues/1997)
 
 ### Fixed
 - Requests with empty body and application/json Content-Type Header will now
@@ -27,6 +30,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Policy loading no longer fails when attempting to update the annotation
   search index for a resource that no longer exists.
   [cyberark/conjur#1948](https://github.com/cyberark/conjur/issues/1948)
+- `GET /resources` request with non-numeric delimiter (limit or offset) now
+  returns `Error 422 Unprocessable Entity` instead of `Error 500`.
+  [cyberark/conjur#1997](https://github.com/cyberark/conjur/issues/1997)
 
 ## [1.11.1] - 2020-11-19
 ### Added
