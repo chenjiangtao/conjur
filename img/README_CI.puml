@@ -1,0 +1,43 @@
+@startuml C4_Elements
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title CI Architecture Overview
+
+' Person(personAlias, "Label", "Optional Description")
+' Boundary(bashScripts, "Bash Scripts") {
+'     Container(bashTests, "Bash CI Scripts", "Wraps Rspec/Cucumber/Etc")
+' }
+
+' TODO: Preamble stuff, scans, build, code coverage, etc
+
+Container(bashTests, "Bash CI Scripts", "Wraps Rspec/Cucumber/Etc")
+    Component(build, "build.sh", "Docker Build Script")
+    Component(runStandardTest, "ci/test", "Runs Named Test Suite")
+        Component(shared, "ci/shared.sh", "Shared Test Suite Functions")
+    Component(submitCoverage, "ci/submit_coverage", "Send coverage to CodeClimate")
+        System(codeClimate, "Code Climate", "Code Quality SaaS")
+    Component(pushImage, "push-image.sh", "Push images to registry")
+        System(dockerRegistry, "Docker Regisry", "Registry hosting images")
+    Component(publishImage, "publish-image.sh", "Publish Debian/RPM packages")
+        System(packageRegistry, "Package Regisry", "Registry hosting Deb/RPM packages")
+
+Component(jenkins, "Jenkins", "CI Test Runner")
+Component(pipelineLib, "Pipeline Library", "Common Jenkins Functions")
+Component(envVars, "Env Vars", "Set by cron/context")
+
+Rel(jenkins, bashTests, "Calls")
+    Rel(bashTests, build, "Calls")
+    Rel(bashTests, runStandardTest, "Calls")
+        Rel(runStandardTest, shared, "Uses")
+    Rel(bashTests, submitCoverage, "Calls")
+        Rel(submitCoverage, codeClimate, "Sends")
+    Rel(bashTests, pushImage, "Calls")
+        Rel(pushImage, dockerRegistry, "Sends")
+    Rel(bashTests, publishImage, "Calls")
+        Rel(publishImage, packageRegistry, "Sends")
+Rel(jenkins, pipelineLib, "Uses")
+Rel(jenkins, envVars, "Uses")
+
+@enduml
