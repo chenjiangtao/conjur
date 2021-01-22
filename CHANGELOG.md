@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   [cyberark/conjur#1987](https://github.com/cyberark/conjur/issues/1987)
 
 ### Fixed
+- Conjur now requires the `service-id` param in an authentication request
+  for the OIDC authenticator.
+  [cyberark/conjur#2004](https://github.com/cyberark/conjur/issues/2004)
 - Requests with empty body and application/json Content-Type Header will now
   return 400 error instead of 500 error.
   [cyberark/conjur#1968](https://github.com/cyberark/conjur/issues/1968)
